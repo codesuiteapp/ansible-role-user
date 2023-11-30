@@ -1,0 +1,6 @@
+---
+create_user: true
+adm_user: "appadm"
+adm_group: "appadm"
+adm_uid: "1000"
+# passwd_adm_user: "__your_passwd_"
