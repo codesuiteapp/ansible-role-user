@@ -40,7 +40,7 @@
   ansible.builtin.user:
     name: "{{ adm_user }}"
     password: "{{ passwd_adm_user | password_hash('sha512') }}" # aval-passwd.yml
-  when: adm_user != 'root'
+  when: adm_user != 'root' and change_passwd
   register: result
 
 - name: Print variables
