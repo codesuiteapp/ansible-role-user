@@ -47,7 +47,7 @@
   ansible.builtin.debug:
     var: result
 
-- name: Add sudoers.d
+- name: Add sudo
   ansible.builtin.copy:
     content: |
       {{ adm_user }} ALL=(ALL) NOPASSWD: ALL
@@ -56,7 +56,7 @@
     group: root
     mode: '0440'
     validate: "/usr/sbin/visudo -c -f '%s'"
-  when: adm_user != 'root' and not result.failed
+  when: adm_user != 'root'
   register: result
 
 - name: Print variables
