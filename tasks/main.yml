@@ -1,19 +1,19 @@
 # code: language=ansible
 ---
-- name: Check if the group exists
-  ansible.builtin.getent:
-    database: group
-    key: "{{ adm_group }}"
-  register: group_exists
-  ignore_errors: true
-  when: create_user
+# - name: Check if the group exists
+#   ansible.builtin.getent:
+#     database: group
+#     key: "{{ adm_group }}"
+#   register: group_exists
+#   ignore_errors: true
+#   when: create_user
 
-- name: Add group
+- name: Create group
   ansible.builtin.group:
     name: "{{ adm_group }}"
     state: present
     # gid: ""
-  when: not group_exists and create_user
+  when: create_user
   register: result
 
 - name: Check if the user exists
@@ -29,8 +29,9 @@
     name: "{{ adm_user }}"
     group: "{{ adm_group }}"
     # uid: "{{ adm_uid }}"
-  when: not user_exists and create_user
+    state: present
   register: result
+  when: create_user
 
 - name: Print variables
   ansible.builtin.debug:
@@ -40,8 +41,8 @@
   ansible.builtin.user:
     name: "{{ adm_user }}"
     password: "{{ passwd_adm_user | password_hash('sha512') }}" # aval-passwd.yml
-  when: adm_user != 'root' and change_passwd
   register: result
+  when: adm_user != 'root' and change_passwd
 
 - name: Print variables
   ansible.builtin.debug:
@@ -56,8 +57,8 @@
     group: root
     mode: '0440'
     validate: "/usr/sbin/visudo -c -f '%s'"
-  when: adm_user != 'root'
   register: result
+  when: adm_user != 'root'
 
 - name: Print variables
   ansible.builtin.debug:
