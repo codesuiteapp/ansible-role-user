@@ -24,7 +24,7 @@
   ignore_errors: true
   when: adm_user != 'root'
 
-- name: Add user
+- name: Create user
   ansible.builtin.user:
     name: "{{ adm_user }}"
     groups: "{{ adm_group }}"
@@ -33,6 +33,15 @@
     state: present
   register: result
   when: create_user
+
+- name: Create a 2048-bit SSH key for user
+  ansible.builtin.user:
+    name: "{{ adm_user }}"
+    generate_ssh_key: yes
+    ssh_key_bits: 2048
+    ssh_key_file: .ssh/id_rsa
+  register: result
+  when: create_ssh_key
 
 - name: Print variables
   ansible.builtin.debug:
