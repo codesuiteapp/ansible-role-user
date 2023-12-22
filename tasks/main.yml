@@ -27,8 +27,9 @@
 - name: Add user
   ansible.builtin.user:
     name: "{{ adm_user }}"
-    group: "{{ adm_group }}"
+    groups: "{{ adm_group }}"
     # uid: "{{ adm_uid }}"
+    append: true
     state: present
   register: result
   when: create_user
